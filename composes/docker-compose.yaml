@@ -1,0 +1,8 @@
+networks:
+  traefik_proxy:
+    name: traefik_proxy # This needs to be named so traefik recognizes it as its default network
+
+include:
+  - apps/traefik/docker-compose.yaml
+  - apps/nginx/docker-compose.yaml
+  - apps/netdata/docker-compose.yaml

@@ -1,0 +1,14 @@
+services:
+  netdata:
+    image: netdata/netdata:latest
+    restart: unless-stopped
+    expose:
+      - "19999"
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.netdata.rule=Host(`netdata.enriqueav.com`)"
+      - "traefik.http.routers.netdata.entrypoints=websecure"
+      - "traefik.http.routers.netdata.tls.certresolver=myresolver"
+      - "traefik.http.services.netdata.loadbalancer.server.port=19999"
