@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  proxy-inverso:
+    image: nginx
+    container_name: nginxReverseProxyHttps
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/proxy-inverso/conf.d/:/etc/nginx/conf.d
+      - ./nginx/proxy-inverso/logs/:/var/log/nginx/
+    networks:
+    - backend
+  
+  web:
+    image: nginx
+    expose:
+      - "80"
+    volumes:
+      - ./nginx/web/html:/usr/share/nginx/html:ro
+      - ./nginx/web/logs/:/var/log/nginx/
+    networks:
+      - backend
+  app1:
+    image: nginx
+    expose:
+      - "80"
+    volumes:
+      - ./nginx/app1/html:/usr/share/nginx/html:ro
+      - ./nginx/app1/logs/:/var/log/nginx/
+    networks:
+      - backend
+networks:
+  backend:

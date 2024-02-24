@@ -1,0 +1,11 @@
+docker run -d \
+  --name certbot-container \
+  -v /ruta/a/tu/certbot/etc:/etc/letsencrypt \
+  -v /ruta/a/tu/certbot/var:/var/lib/letsencrypt \
+  certbot/certbot \
+  certonly --webroot \
+  --register-unsafely-without-email \
+  --agree-tos \
+  -w /usr/share/nginx/html \
+  -d enriqueav.com
+

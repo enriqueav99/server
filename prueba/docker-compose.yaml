@@ -1,0 +1,52 @@
+version: '3.3'
+services:
+  www:
+    image: nginx
+    restart: always
+    expose:
+      - "80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    environment:
+      - VIRTUAL_HOST=enriqueav.com,www.enriqueav.com
+      - LETSENCRYPT_HOST=enriqueav.com,www.enriqueav.com
+      - LETSENCRYT_EMAIL=asdf@asdf.com
+    depends_on: 
+      - nginx-proxy
+      - lets-encrypt
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - ./index.html:/usr/share/nginx/html/index.html
+      - acme:/etc/acme.sh
+      - vhostd:/etc/nginx/vhost.d
+
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy    
+
+  lets-encrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy  
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - /etc/nginx/vhost.d
+      - ./index.html:/usr/share/nginx/html/index.html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - acme:/etc/acme.sh
+      - vhostd:/etc/nginx/vhost.d
+
+volumes: 
+  certs: 
+  html: 
+  acme:
+  vhostd:
