@@ -1,0 +1,21 @@
+services:
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $./homarr/configs:/app/data/configs
+      - $./homarr/icons:/app/public/icons
+      - $./homarr/data:/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - BASE_URL=https://home.enriqueav.com
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homarr.rule=Host(`home.enriqueav.com`)"
+      - "traefik.http.routers.homarr.entrypoints=websecure"
+      - "traefik.http.routers.homarr.tls.certresolver=myresolver"
+      - "traefik.http.services.homarr.loadbalancer.server.port=7575"

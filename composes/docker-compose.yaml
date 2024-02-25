@@ -6,3 +6,6 @@ include:
   - apps/traefik/docker-compose.yaml
   - apps/nginx/docker-compose.yaml
   - apps/netdata/docker-compose.yaml
+  - apps/nextcloud/docker-compose.yaml
+  - apps/collabora/docker-compose.yaml
+#  - apps/homarr/docker-compose.yaml

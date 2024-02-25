@@ -1,0 +1,12 @@
+proxy-inverso:
+    image: nginx
+    container_name: nginxReverseProxyHttps
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/proxy-inverso/conf.d/:/etc/nginx/conf.d
+      - ./nginx/proxy-inverso/logs/:/var/log/nginx/
+    networks:
+    - backend

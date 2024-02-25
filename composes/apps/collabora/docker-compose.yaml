@@ -1,0 +1,20 @@
+services:
+  collabora:
+    image: collabora/code:latest
+    container_name: collabora
+    restart: unless-stopped
+    networks: 
+      - traefik_proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - password=manager 
+      - username=system
+#      - domain=collabora.enriqueav.com # domain your nextcloud is on
+      - extra_params=--o:ssl.enable=true # Use if have ssl. You should.
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`collabora.enriqueav.com`)"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=9980"

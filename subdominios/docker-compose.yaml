@@ -1,18 +1,22 @@
 version: '3.8'
 services:
-  proxy-inverso:
-    image: nginx
-    container_name: nginxReverseProxyHttps
-    restart: always
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "8080:8080"
     volumes:
-      - ./nginx/proxy-inverso/conf.d/:/etc/nginx/conf.d
-      - ./nginx/proxy-inverso/logs/:/var/log/nginx/
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
-    - backend
-  
+      - proxy
+
   web:
     image: nginx
     expose:
@@ -21,7 +25,12 @@ services:
       - ./nginx/web/html:/usr/share/nginx/html:ro
       - ./nginx/web/logs/:/var/log/nginx/
     networks:
-      - backend
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`web.enriqueav.com`)"
+      - "traefik.http.routers.web.entrypoints=web"
+
   app1:
     image: nginx
     expose:
@@ -30,6 +39,10 @@ services:
       - ./nginx/app1/html:/usr/share/nginx/html:ro
       - ./nginx/app1/logs/:/var/log/nginx/
     networks:
-      - backend
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app1.rule=Host(`app1.enriqueav.com`)"
+      - "traefik.http.routers.app1.entrypoints=web"
 networks:
-  backend:
+  proxy:
