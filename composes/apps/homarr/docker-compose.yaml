@@ -2,11 +2,12 @@ services:
   homarr:
     image: ghcr.io/ajnart/homarr:latest
     restart: unless-stopped
+    container_name: homarr
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - $./homarr/configs:/app/data/configs
-      - $./homarr/icons:/app/public/icons
-      - $./homarr/data:/data
+      - /home/enriqueav/docker-data/homarr/configs:/app/data/configs
+      - /home/enriqueav/docker-data/homarr/icons:/app/public/icons
+      - /home/enriqueav/docker-data/homarr/data:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -19,3 +20,5 @@ services:
       - "traefik.http.routers.homarr.entrypoints=websecure"
       - "traefik.http.routers.homarr.tls.certresolver=myresolver"
       - "traefik.http.services.homarr.loadbalancer.server.port=7575"
+      - "traefik.http.middlewares.homarr-auth.basicauth.users=enriqueav:$$2y$$05$$hk.APaVHm85R//l0kOtG0.39WN6UUa60WW5BAFSO5sP/fPmu0Sn2i"
+      - "traefik.http.routers.homarr.middlewares=homarr-auth@docker"

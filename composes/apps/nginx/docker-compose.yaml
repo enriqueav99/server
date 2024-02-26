@@ -14,8 +14,7 @@ services:
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls.certresolver=myresolver"
       - "traefik.http.services.web.loadbalancer.server.port=80"
-      - "traefik.http.middlewares.web-auth.basicauth.users=enriqueav:$$2y$$05$$hk.APaVHm85R//l0kOtG0.39WN6UUa60WW5BAFSO5sP/fPmu0Sn2i"
-      - "traefik.http.routers.web.middlewares=web-auth@docker"
+
     environment:
       - PUID=1000
       - PGID=1000

@@ -1,0 +1,20 @@
+services:
+  home-assistant:
+    image: ghcr.io/home-assistant/home-assistant:latest
+    restart: unless-stopped
+    container_name: home-assistant
+    networks:
+      - traefik_proxy
+    ports:
+      - 8090:8123
+    volumes:
+      - /home/enriqueav/docker-data/home-assistant/config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.home-assistant.rule=Host(`assist.enriqueav.com`)"
+      - "traefik.http.routers.home-assistant.entrypoints=websecure"
+      - "traefik.http.routers.home-assistant.tls.certresolver=myresolver"
+      - "traefik.http.services.home-assistant.loadbalancer.server.port=8123"

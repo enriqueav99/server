@@ -2,6 +2,7 @@ services:
   traefik:
     image: traefik:latest
     restart: unless-stopped
+    container_name: traefik
     command:
       - "--log.level=DEBUG"
       - "--api.insecure=true"
@@ -22,13 +23,13 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./letsencrypt:/letsencrypt
+      - /home/enriqueav/docker-data/traefik/letsencrypt:/letsencrypt
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.enriqueav.com`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - traefik.enable=true
+      - traefik.http.routers.traefik.rule=Host(`traefik.enriqueav.com`)
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.tls.certresolver=myresolver
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
       - "traefik.http.middlewares.traefik-auth.basicauth.users=enriqueav:$$2y$$05$$hk.APaVHm85R//l0kOtG0.39WN6UUa60WW5BAFSO5sP/fPmu0Sn2i"
       - "traefik.http.routers.traefik.middlewares=traefik-auth@docker"
     environment:

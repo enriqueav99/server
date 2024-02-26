@@ -1,11 +1,17 @@
 networks:
   traefik_proxy:
-    name: traefik_proxy # This needs to be named so traefik recognizes it as its default network
+    name: traefik_proxy 
 
 include:
   - apps/traefik/docker-compose.yaml
   - apps/nginx/docker-compose.yaml
   - apps/netdata/docker-compose.yaml
-  - apps/nextcloud/docker-compose.yaml
-  - apps/collabora/docker-compose.yaml
-#  - apps/homarr/docker-compose.yaml
+#  - apps/nextcloud/docker-compose.yaml
+#  - apps/collabora/docker-compose.yaml
+  - apps/portainer/docker-compose.yaml
+  - apps/homarr/docker-compose.yaml
+  - apps/discord-bot/docker-compose.yaml
+  - apps/excalidraw/docker-compose.yaml
+#  - apps/minecraft/docker-compose.yaml
+#  - apps/home-assistant/docker-compose.yaml
+#  - apps/gd-dyndns/docker-compose.yaml

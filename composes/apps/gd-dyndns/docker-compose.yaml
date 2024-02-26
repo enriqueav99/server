@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  actip.enriqueav.com:
+    image: linuxshots/godaddy-ddns:latest
+    container_name: actip.enriqueav.com
+    restart: unless-stopped
+    environment:
+      - GD_NAME=actip
+      - GD_DOMAIN=enriqueav.com
+      - GD_TTL=1200
+      - GD_KEY=${GD_KEY}
+      - GD_SECRET=${GD_SECRET}

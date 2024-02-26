@@ -2,6 +2,7 @@ services:
   netdata:
     image: netdata/netdata:latest
     restart: unless-stopped
+    container_name: netdata
     expose:
       - "19999"
     networks:
@@ -17,3 +18,15 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+    volumes:
+      - /home/enriqueav/docker-data/netdata/config:/etc/netdata
+      - /home/enriqueav/docker-data/netdata/lib:/var/lib/netdata
+      - /home/enriqueav/docker-data/netdata/cache:/var/cache/netdata
+#      - /etc/passwd:/host/etc/passwd:ro
+#      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
