@@ -18,7 +18,8 @@ jobs:
     - name: 🧲 Checkout Code
       uses: actions/checkout@v4
 
-    - uses: 🐍 actions/setup-python@v5
+    - name: 🐍 Install Python3
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.10'  
 
