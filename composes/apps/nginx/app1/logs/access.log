@@ -98,3 +98,4 @@
 172.21.0.2 - - [29/Feb/2024:01:54:16 +0000] "GET /.git/config HTTP/1.1" 404 555 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.100.4896.127 Safari/537.36" "193.32.162.87"
 172.21.0.2 - - [29/Feb/2024:04:39:13 +0000] "GET / HTTP/1.1" 200 1256 "-" "-" "135.148.100.196"
 172.21.0.2 - - [29/Feb/2024:17:18:21 +0000] "GET / HTTP/1.1" 200 1256 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" "95.217.18.177"
+192.168.112.7 - - [29/Feb/2024:21:30:19 +0000] "GET / HTTP/1.1" 200 1256 "-" "Mozilla/5.0 (compatible)" "54.198.55.229"
