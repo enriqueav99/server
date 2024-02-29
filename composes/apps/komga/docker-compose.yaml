@@ -12,7 +12,7 @@ services:
         source: ${DATA_DIRECTORY}/komga
         target: /data
       - type: bind
-        source: /etc/timezone #alternatively you can use a TZ environment variable, like TZ=Europe/London
+        source: /etc/timezone
         target: /etc/timezone
         read_only: true
     user: "1000:1000"
