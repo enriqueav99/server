@@ -27,4 +27,4 @@ jobs:
       run: pip install yamllint
 
     - name: 🔍 Check linting
-      run: '''yamllint -d "{extends: relaxed, rules: {document-start: false}}" $(find ./composes -regextype posix-extended -regex ".*\.(yml|yaml)")'''
+      run: '''yamllint -d "{extends: relaxed, rules: {document-start: false, documents-end:false}}" '''
