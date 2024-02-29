@@ -1,27 +1,8 @@
 services:
-  prometheus-node:
-    image: prom/prometheus
-    user: root
-    container_name: prometheus-node
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--web.enable-lifecycle'
-    networks:
-      - grafana_net
-    restart: unless-stopped
-    volumes:
-      - /home/enriqueav/docker-data/prom-gra/prometheus:/etc/prometheus
-      - /home/enriqueav/docker-data/prom-gra/prom_data:/prometheus
-
   prometheus:
     image: prom/prometheus
     user: root
     container_name: prometheus
-    ports:
-      - "9090:9090"
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -33,8 +14,8 @@ services:
       - traefik_proxy
     restart: unless-stopped
     volumes:
-      - /home/enriqueav/docker-data/prom-gra/prometheus-traefik/prometheus:/etc/prometheus
-      - /home/enriqueav/docker-data/prom-gra/prometheus-traefik/prom_data:/prometheus
+      - /home/enriqueav/docker-data/prom-gra/prometheus:/etc/prometheus
+      - /home/enriqueav/docker-data/prom-gra/prom_data:/prometheus
 
   node-exporter:
     image: prom/node-exporter
@@ -56,10 +37,12 @@ services:
     image: grafana/grafana
     container_name: grafana
     restart: unless-stopped
+    user: root
     networks:
       - grafana_net
       - traefik_proxy
     environment:
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
       - GF_SECURITY_ADMIN_USER=system
       - GF_SECURITY_ADMIN_PASSWORD=manager
       - GF_SERVER_DOMAIN="grafana.enriqueav.com"
@@ -72,7 +55,12 @@ services:
       retries: 3
       start_period: 5s
     volumes:
-      - /home/enriqueav/docker-data/prom-gra/grafana:/etc/grafana/provisioning/datasources
+      - ./entrypoint.sh:/app/entrypoint.sh
+      - /home/enriqueav/docker-data/prom-gra/grafana/config/dashboards:/etc/grafana/provisioning/datasources
+      - /home/enriqueav/docker-data/prom-gra/grafana/config/datasources:/etc/grafana/datasources
+      - /home/enriqueav/docker-data/prom-gra/grafana/config/plugins:/var/lib/grafana/plugins
+      - /home/enriqueav/docker-data/prom-gra/grafana/grafana_data:/var/lib/grafana
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.grafana.rule=Host(`grafana.enriqueav.com`)"
