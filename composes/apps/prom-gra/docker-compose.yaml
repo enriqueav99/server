@@ -1,0 +1,85 @@
+services:
+  prometheus-node:
+    image: prom/prometheus
+    user: root
+    container_name: prometheus-node
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - grafana_net
+    restart: unless-stopped
+    volumes:
+      - /home/enriqueav/docker-data/prom-gra/prometheus:/etc/prometheus
+      - /home/enriqueav/docker-data/prom-gra/prom_data:/prometheus
+
+  prometheus:
+    image: prom/prometheus
+    user: root
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - grafana_net
+      - traefik_proxy
+    restart: unless-stopped
+    volumes:
+      - /home/enriqueav/docker-data/prom-gra/prometheus-traefik/prometheus:/etc/prometheus
+      - /home/enriqueav/docker-data/prom-gra/prometheus-traefik/prom_data:/prometheus
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - grafana_net
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      - grafana_net
+      - traefik_proxy
+    environment:
+      - GF_SECURITY_ADMIN_USER=system
+      - GF_SECURITY_ADMIN_PASSWORD=manager
+      - GF_SERVER_DOMAIN="grafana.enriqueav.com"
+      - GF_SERVER_ROOT_URL=https://grafana.enriqueav.com
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    volumes:
+      - /home/enriqueav/docker-data/prom-gra/grafana:/etc/grafana/provisioning/datasources
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.enriqueav.com`)"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=myresolver
+      
+networks:
+  grafana_net:
+    driver: bridge

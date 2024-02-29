@@ -1,0 +1,27 @@
+services:
+  komga:
+    image: gotson/komga
+    container_name: komga
+    networks:
+      - traefik_proxy
+    volumes:
+      - type: bind
+        source: /home/enriqueav/docker-data/komga
+        target: /config
+      - type: bind
+        source: /home/enriqueav/docker-data/komga
+        target: /data
+      - type: bind
+        source: /etc/timezone #alternatively you can use a TZ environment variable, like TZ=Europe/London
+        target: /etc/timezone
+        read_only: true
+    ports:
+      - 25600:25600
+    user: "1000:1000"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.komga.rule=Host(`komga.enriqueav.com`)
+      - traefik.http.services.komga.loadbalancer.server.port=25600
+      - traefik.http.routers.komga.entrypoints=websecure
+      - traefik.http.routers.komga.tls.certresolver=myresolver

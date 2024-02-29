@@ -11,10 +11,10 @@ services:
       - password=manager 
       - username=system
 #      - domain=collabora.enriqueav.com # domain your nextcloud is on
-      - extra_params=--o:ssl.enable=true # Use if have ssl. You should.
+#      - extra_params=--o:ssl.enable=true # Use if have ssl. You should.
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nextcloud.rule=Host(`collabora.enriqueav.com`)"
-      - "traefik.http.routers.nextcloud.entrypoints=websecure"
-      - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=9980"
+      - "traefik.http.routers.collabora.rule=Host(`collabora.enriqueav.com`)"
+      - "traefik.http.services.collabora.loadbalancer.server.port=9980"
+      - traefik.http.routers.collabora.entrypoints=websecure
+      - traefik.http.routers.collabora.tls.certresolver=myresolver
