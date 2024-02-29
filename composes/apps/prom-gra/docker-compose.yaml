@@ -10,12 +10,12 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
     networks:
-      - grafana_net
+      - monitor_net
       - traefik_proxy
     restart: unless-stopped
     volumes:
-      - /home/enriqueav/docker-data/prom-gra/prometheus:/etc/prometheus
-      - /home/enriqueav/docker-data/prom-gra/prom_data:/prometheus
+      - ${DATA_DIRECTORY}/prom-gra/prometheus:/etc/prometheus
+      - ${DATA_DIRECTORY}/prom-gra/prom_data:/prometheus
 
   node-exporter:
     image: prom/node-exporter
@@ -30,7 +30,7 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     networks:
-      - grafana_net
+      - monitor_net
     restart: unless-stopped
 
   grafana:
@@ -39,14 +39,16 @@ services:
     restart: unless-stopped
     user: root
     networks:
-      - grafana_net
       - traefik_proxy
+    depends_on:
+      - nextclouddb
+      - prometheus
     environment:
       - GF_INSTALL_PLUGINS=grafana-piechart-panel
-      - GF_SECURITY_ADMIN_USER=system
-      - GF_SECURITY_ADMIN_PASSWORD=manager
-      - GF_SERVER_DOMAIN="grafana.enriqueav.com"
-      - GF_SERVER_ROOT_URL=https://grafana.enriqueav.com
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_SERVER_DOMAIN="grafana.${DOMINIO}"
+      - GF_SERVER_ROOT_URL=https://grafana.${DOMINIO}
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/"]
@@ -56,18 +58,17 @@ services:
       start_period: 5s
     volumes:
       - ./entrypoint.sh:/app/entrypoint.sh
-      - /home/enriqueav/docker-data/prom-gra/grafana/config/dashboards:/etc/grafana/provisioning/datasources
-      - /home/enriqueav/docker-data/prom-gra/grafana/config/datasources:/etc/grafana/datasources
-      - /home/enriqueav/docker-data/prom-gra/grafana/config/plugins:/var/lib/grafana/plugins
-      - /home/enriqueav/docker-data/prom-gra/grafana/grafana_data:/var/lib/grafana
-
+      - ${DATA_DIRECTORY}/prom-gra/grafana/config/dashboards:/etc/grafana/provisioning/datasources
+      - ${DATA_DIRECTORY}/prom-gra/grafana/config/datasources:/etc/grafana/datasources
+      - ${DATA_DIRECTORY}/prom-gra/grafana/config/plugins:/var/lib/grafana/plugins
+      - ${DATA_DIRECTORY}/prom-gra/grafana/grafana_data:/var/lib/grafana
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.enriqueav.com`)"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.${DOMINIO}`)"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.tls.certresolver=myresolver
       
 networks:
-  grafana_net:
+  monitor_net:
     driver: bridge

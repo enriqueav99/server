@@ -9,19 +9,19 @@ services:
       - traefik_proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.netdata.rule=Host(`netdata.enriqueav.com`)"
+      - "traefik.http.routers.netdata.rule=Host(`netdata.${DOMINIO}`)"
       - "traefik.http.routers.netdata.entrypoints=websecure"
       - "traefik.http.routers.netdata.tls.certresolver=myresolver"
       - "traefik.http.services.netdata.loadbalancer.server.port=19999"
-      - "traefik.http.middlewares.netdata-auth.basicauth.users=enriqueav:$$2y$$05$$hk.APaVHm85R//l0kOtG0.39WN6UUa60WW5BAFSO5sP/fPmu0Sn2i"
+      - "traefik.http.middlewares.netdata-auth.basicauth.users=${AUTH}"
       - "traefik.http.routers.netdata.middlewares=netdata-auth@docker"
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - /home/enriqueav/docker-data/netdata/config:/etc/netdata
-      - /home/enriqueav/docker-data/netdata/lib:/var/lib/netdata
-      - /home/enriqueav/docker-data/netdata/cache:/var/cache/netdata
+      - ${DATA_DIRECTORY}/netdata/config:/etc/netdata
+      - ${DATA_DIRECTORY}/netdata/lib:/var/lib/netdata
+      - ${DATA_DIRECTORY}/netdata/cache:/var/cache/netdata
 #      - /etc/passwd:/host/etc/passwd:ro
 #      - /etc/group:/host/etc/group:ro
       - /etc/localtime:/etc/localtime:ro

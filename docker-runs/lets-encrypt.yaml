@@ -7,5 +7,5 @@ docker run -d \
   --register-unsafely-without-email \
   --agree-tos \
   -w /usr/share/nginx/html \
-  -d enriqueav.com
+  -d ${DOMINIO}
 

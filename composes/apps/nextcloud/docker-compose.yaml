@@ -1,0 +1,56 @@
+services:
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    restart: unless-stopped
+    networks: 
+      - nextcloud
+      - traefik_proxy
+    depends_on:
+      - nextclouddb
+      - nextcloudredis
+    volumes:
+      - ${DATA_DIRECTORY}/next-cloud/html:/var/www/html
+      - ${DATA_DIRECTORY}/next-cloud/custom_apps:/var/www/html/custom_apps
+      - ${DATA_DIRECTORY}/next-cloud/config:/var/www/html/config
+      - ${DATA_DIRECTORY}/next-cloud/data:/var/www/html/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=system
+      - MYSQL_PASSWORD=manager
+      - MYSQL_HOST=nextclouddb
+      - REDIS_HOST=nextcloudredis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.enriqueav.com`)"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.tls.certresolver=myresolver
+  nextclouddb:
+    image: mariadb
+    container_name: nextcloud-db
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    networks: 
+      - nextcloud
+    volumes:
+      - ${DATA_DIRECTORY}/next-cloud/nextclouddb:/var/lib/mysql
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_PASSWORD=manager
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=system
+  
+  nextcloudredis:
+    image: redis:alpine
+    container_name: next-cloud-redis
+    volumes:
+      - ${DATA_DIRECTORY}/next-cloud/redis:/data  
+    networks: 
+      - nextcloud
+networks:
+  nextcloud:

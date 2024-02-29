@@ -8,13 +8,13 @@ services:
     ports:
       - 8090:8123
     volumes:
-      - /home/enriqueav/docker-data/home-assistant/config:/config
+      - ${DATA_DIRECTORY}/home-assistant/config:/config
     environment:
       - PUID=1000
       - PGID=1000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.home-assistant.rule=Host(`assist.enriqueav.com`)"
+      - "traefik.http.routers.home-assistant.rule=Host(`assist.${DOMINIO}`)"
       - "traefik.http.routers.home-assistant.entrypoints=websecure"
       - "traefik.http.routers.home-assistant.tls.certresolver=myresolver"
       - "traefik.http.services.home-assistant.loadbalancer.server.port=8123"

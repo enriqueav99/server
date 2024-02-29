@@ -20,4 +20,4 @@ services:
         enriqueav99
     volumes:
       # attach the relative directory 'data' to the container's /data path
-      - /home/enriqueav/docker-data/minecraft:/data
+      - ${DATA_DIRECTORY}/minecraft:/data

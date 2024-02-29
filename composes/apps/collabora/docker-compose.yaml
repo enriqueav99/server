@@ -10,11 +10,11 @@ services:
       - PGID=1000
       - password=manager 
       - username=system
-#      - domain=collabora.enriqueav.com # domain your nextcloud is on
+#      - domain=collabora.${DOMINIO} # domain your nextcloud is on
 #      - extra_params=--o:ssl.enable=true # Use if have ssl. You should.
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.collabora.rule=Host(`collabora.enriqueav.com`)"
+      - "traefik.http.routers.collabora.rule=Host(`collabora.${DOMINIO}`)"
       - "traefik.http.services.collabora.loadbalancer.server.port=9980"
       - traefik.http.routers.collabora.entrypoints=websecure
       - traefik.http.routers.collabora.tls.certresolver=myresolver

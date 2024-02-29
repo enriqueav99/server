@@ -7,7 +7,7 @@ services:
       - traefik_proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /home/enriqueav/docker-data/portainer:/data
+      - ${DATA_DIRECTORY}/portainer:/data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.rule=Host(`portainer.${DOMINIO}`)"

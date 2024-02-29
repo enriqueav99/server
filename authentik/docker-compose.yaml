@@ -27,7 +27,7 @@ services:
       labels:
           traefik.enable: true
           traefik.port: 9000
-          traefik.http.routers.authentik.rule: Host(`auth.enriqueav.com`) && PathPrefix(`/outpost.goauthentik.io/`)
+          traefik.http.routers.authentik.rule: Host(`auth.${DOMINIO}`) && PathPrefix(`/outpost.goauthentik.io/`)
           # `authentik-proxy` refers to the service name in the compose file.
           traefik.http.middlewares.authentik.forwardauth.address: http://authentik-proxy:9000/outpost.goauthentik.io/auth/traefik
           traefik.http.middlewares.authentik.forwardauth.trustForwardHeader: true
@@ -38,6 +38,6 @@ services:
       image: containous/whoami
       labels:
           traefik.enable: true
-          traefik.http.routers.whoami.rule: Host(`whoami.enriqueav.com`)
+          traefik.http.routers.whoami.rule: Host(`whoami.${DOMINIO}`)
           traefik.http.routers.whoami.middlewares: authentik@docker
       restart: unless-stopped
