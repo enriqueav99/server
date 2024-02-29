@@ -20,4 +20,3 @@ services:
         enriqueav99
     volumes:
       - ${DATA_DIRECTORY}/minecraft:/data
-      

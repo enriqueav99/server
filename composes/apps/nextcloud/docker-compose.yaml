@@ -3,7 +3,7 @@ services:
     image: nextcloud
     container_name: nextcloud
     restart: unless-stopped
-    networks: 
+    networks:
       - nextcloud
       - traefik_proxy
     depends_on:
@@ -33,7 +33,7 @@ services:
     container_name: nextcloud-db
     restart: unless-stopped
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-    networks: 
+    networks:
       - nextcloud
     volumes:
       - ${DATA_DIRECTORY}/next-cloud/nextclouddb:/var/lib/mysql
@@ -44,14 +44,13 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_HOST=${MYSQL_HOST}
-  
-  
+
   nextcloudredis:
     image: redis:alpine
     container_name: next-cloud-redis
     volumes:
-      - ${DATA_DIRECTORY}/next-cloud/redis:/data  
-    networks: 
+      - ${DATA_DIRECTORY}/next-cloud/redis:/data
+    networks:
       - nextcloud
 networks:
   nextcloud:

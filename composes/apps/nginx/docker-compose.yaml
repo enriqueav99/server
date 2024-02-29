@@ -5,7 +5,6 @@ services:
       - "80"
     volumes:
       - ./web/html:/usr/share/nginx/html:ro
-      - ./web/logs/:/var/log/nginx/
     networks:
       - traefik_proxy
     labels:
@@ -25,7 +24,6 @@ services:
       - "80"
     volumes:
       - ./app1/html:/usr/share/nginx/html:ro
-      - ./app1/logs/:/var/log/nginx/
     networks:
       - traefik_proxy
     labels:
