@@ -3,12 +3,12 @@ services:
     image: collabora/code:latest
     container_name: collabora
     restart: unless-stopped
-    networks: 
+    networks:
       - traefik_proxy
     environment:
       - PUID=1000
       - PGID=1000
-      - password=manager 
+      - password=manager
       - username=system
 #      - domain=collabora.${DOMINIO} # domain your nextcloud is on
 #      - extra_params=--o:ssl.enable=true # Use if have ssl. You should.

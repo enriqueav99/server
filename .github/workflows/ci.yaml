@@ -1,0 +1,31 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  linting:
+    name: 🔍 Check Linting
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🧲 Checkout Code
+      uses: actions/checkout@v4
+
+    - name: 🐍 Install Python3
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'  
+
+    - name: ⬇️ Install yamllint
+      run: pip install yamllint
+
+    - name: 🔍 Check linting
+      run: |
+        yamllint -d "{extends: relaxed, rules: {document-start: false}}" $(find ./composes -regextype posix-extended -regex ".*\.(yml|yaml)")

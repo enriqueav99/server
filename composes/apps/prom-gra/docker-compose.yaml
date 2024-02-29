@@ -68,7 +68,7 @@ services:
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.tls.certresolver=myresolver
-      
+
 networks:
   monitor_net:
     driver: bridge
