@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  actip.${DOMINIO}:
+  actip:
     image: linuxshots/godaddy-ddns:latest
     container_name: actip.${DOMINIO}
     restart: unless-stopped

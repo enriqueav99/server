@@ -33,6 +33,20 @@ services:
       - monitor_net
     restart: unless-stopped
 
+  alertmanager:
+    image: prom/alertmanager:v0.23.0
+    container_name: alertmanager
+    restart: unless-stopped
+    volumes:
+      - ${DATA_DIRECTORY}/alertmanager-config:/config
+      - ${DATA_DIRECTORY}/alertmanager:/data
+    command: --config.file=/config/alertmanager.yml --log.level=debug
+    networks:
+      - monitor_net
+      - traefik_proxy
+    depends_on:
+      - prometheus
+
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -40,8 +54,8 @@ services:
     user: root
     networks:
       - traefik_proxy
+      - monitor_net
     depends_on:
-      - nextclouddb
       - prometheus
     environment:
       - GF_INSTALL_PLUGINS=grafana-piechart-panel
