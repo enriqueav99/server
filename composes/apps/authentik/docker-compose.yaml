@@ -36,7 +36,10 @@ services:
     restart: unless-stopped
     container_name: authentik-server
     command: server
+    user: root
     environment:
+#      PGID: 1000
+#      PUID: 1000
       AUTHENTIK_REDIS__HOST: authentik-redis
       AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
@@ -45,7 +48,7 @@ services:
     volumes:
       - ${DATA_DIRECTORY}/authentik/server/media:/media
       - ${DATA_DIRECTORY}/authentik/server/custom-templates:/templates
-      - geoip:/geoip
+      - ${DATA_DIRECTORY}/authentik/server/geoip:/geoip
     env_file:
       - .env
 #    ports:
@@ -55,11 +58,12 @@ services:
       - traefik_proxy
       - authentik
     labels:
-      - traefik.enable= true
-      - "traefik.http.services.authentik.loadbalancer.server.port=9443"
+      - traefik.enable=true
+      - traefik.http.services.authentik.loadbalancer.server.port=9443
       - traefik.http.routers.authentik.entrypoints=websecure
       - traefik.http.routers.authentik.tls.certresolver=myresolver
-      - traefik.http.routers.authentik.rule= Host(`auth.${DOMINIO}`) || HostRegexp(`{subdomain:[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?}.${DOMINIO}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      - traefik.http.routers.authentik.rule=Host(`auth.${DOMINIO}`) || HostRegexp(`{subdomain:[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?}.${DOMINIO}`) && PathPrefix(`/outpost.goauthentik.io/`)
+
   worker:
     image: ghcr.io/goauthentik/server:latest
     restart: unless-stopped
@@ -73,34 +77,14 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
     user: root
     volumes:
-      - ./media:/media
-      - ./certs:/certs
+      - ${DATA_DIRECTORY}/authentik/server/media:/media
+      - ${DATA_DIRECTORY}/authentik/server/certs:/certs
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./custom-templates:/templates
-      - ${DATA_DIRECTORY}/authentik/server/geoip:/geoip
+      - ${DATA_DIRECTORY}/authentik/server/custom-templates:/templates
     env_file:
       - .env
     networks:
       - authentik
-  geoipupdate:
-    image: "maxmindinc/geoipupdate:latest"
-    container_name: authentik-geoip
-    volumes:
-      - "${DATA_DIRECTORY}/authentik/server/geoip:/usr/share/GeoIP"
-    environment:
-      GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
-      GEOIPUPDATE_FREQUENCY: "8"
-    env_file:
-      - .env
-    networks:
-      - authentik
-
-volumes:
-  database:
-    driver: local
-  geoip:
-    driver: local
 
 networks:
   authentik:
-

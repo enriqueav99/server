@@ -1,0 +1,18 @@
+services:
+  localai:
+    image: localai/localai:latest
+    container_name: localai
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    volumes:
+      - ./models:/models:cached
+      - ./images/:/tmp/generated/images/
+    command: ["/usr/bin/local-ai" ]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.localai.rule=Host(`localai.${DOMINIO}`)
+      - traefik.http.services.localai.loadbalancer.server.port=8080
+      - traefik.http.routers.localai.entrypoints=websecure
+      - traefik.http.routers.localai.tls.certresolver=myresolver
