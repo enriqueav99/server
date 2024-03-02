@@ -14,7 +14,7 @@ include:
   - apps/discord-bot/docker-compose.yaml
   - apps/excalidraw/docker-compose.yaml
   - apps/komga/docker-compose.yaml
-  - apps/prom-gra/docker-compose.yaml
+  - apps/monitoreo/docker-compose.yaml
 #  - apps/local-ai/docker-compose.yaml
 #  - apps/minecraft/docker-compose.yaml
 #  - apps/home-assistant/docker-compose.yaml
