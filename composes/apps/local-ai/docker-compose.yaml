@@ -1,6 +1,6 @@
 services:
   localai:
-    image: localai/localai:latest
+    image: localai/localai:v2.9.0-ffmpeg
     container_name: localai
     ports:
       - 8080:8080

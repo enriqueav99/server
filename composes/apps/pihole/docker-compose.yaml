@@ -1,0 +1,24 @@
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "8888:80/tcp"
+    environment:
+      WEBPASSWORD: ${PASSWORD}
+    cap_add:
+      - NET_ADMIN
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    volumes:
+      - '${DATA_DIRECTORY}/pihole/etc-pihole:/etc/pihole'
+      - '${DATA_DIRECTORY}/pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
+    restart: unless-stopped
+    networks:
+      vpn:
+        ipv4_address: 172.20.0.7
