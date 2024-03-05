@@ -32,8 +32,7 @@ services:
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.tls.certresolver=myresolver
       - traefik.http.services.traefik.loadbalancer.server.port=8080
-      - traefik.http.middlewares.traefik-auth.basicauth.users=${AUTH}
-      - "traefik.http.routers.traefik.middlewares=traefik-auth@docker"
+      - "traefik.http.routers.traefik.middlewares=authentik@docker"
     environment:
       - PUID=1000
       - PGID=1000

@@ -6,7 +6,6 @@ networks:
 include:
   - apps/traefik/docker-compose.yaml
   - apps/nginx/docker-compose.yaml
-#  - apps/netdata/docker-compose.yaml
   - apps/nextcloud/docker-compose.yaml
   - apps/collabora/docker-compose.yaml
   - apps/portainer/docker-compose.yaml
@@ -15,8 +14,12 @@ include:
   - apps/excalidraw/docker-compose.yaml
   - apps/komga/docker-compose.yaml
   - apps/monitoreo/docker-compose.yaml
+  - apps/gd-dyndns/docker-compose.yaml
+  - apps/authentik/docker-compose.yaml
+  - apps/wireguard/docker-compose.yaml
+#  - apps/wireguard-pihole/docker-compose.yaml
 #  - apps/local-ai/docker-compose.yaml
 #  - apps/minecraft/docker-compose.yaml
 #  - apps/home-assistant/docker-compose.yaml
-  - apps/gd-dyndns/docker-compose.yaml
-  - apps/authentik/docker-compose.yaml
+#  - apps/netdata/docker-compose.yaml
+#  - apps/pihole-dhcp/docker-compose.yaml
