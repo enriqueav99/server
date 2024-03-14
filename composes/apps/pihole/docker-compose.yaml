@@ -2,7 +2,6 @@ services:
   plex:
     image: linuxserver/plex:latest
     restart: unless-stopped
-    container_name: plex
     networks:
       - traefik_proxy
     ports:
@@ -22,12 +21,11 @@ services:
       - TZ=Europe/Madrid
       - VERSION=docker
       - ADVERTISE_IP=http://plex.${DOMINIO}/
-      - PLEX_CLAIM=claim-ztpTQVbEmDquyzdQyxop
     env_file:
       - .env
     volumes:
-      - ${DATA_DIRECTORY}/plex:/config
-      - ${MEDIA}/downloads:/data/movies
+      - ${APPDATADIR}/plex:/config
+      - ${DATADIR}/media:/media
     devices:
       - /dev/dri:/dev/dri
     labels:

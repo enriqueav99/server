@@ -1,0 +1,26 @@
+services:
+  bazarr:
+    image: linuxserver/bazarr:latest
+    restart: unless-stopped
+    container_name: bazarr
+    networks:
+      - traefik_proxy
+    volumes:
+      - ${DATA_DIRECTORY}/bazarr:/config
+      - ${MEDIA}/media:/data/media
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
+      - traefik.http.routers.bazarr-auth.rule=Host(`bazarr.${DOMINIO}`)
+      - traefik.http.routers.bazarr-auth.priority=1
+      - traefik.http.routers.bazarr-auth.entrypoints=websecure
+      - traefik.http.routers.bazarr-auth.tls.certresolver=myresolver
+      - traefik.http.routers.bazarr-auth.middlewares=authentik@docker
+      - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMINIO}`) && PathPrefix(`/api`)
+      - traefik.http.routers.bazarr.priority=2
+      - traefik.http.routers.bazarr.entrypoints=websecure
+      - traefik.http.routers.bazarr.tls.certresolver=myresolver

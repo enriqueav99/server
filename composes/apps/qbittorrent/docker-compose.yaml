@@ -1,0 +1,28 @@
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    restart: unless-stopped
+    container_name: torrent
+    networks:
+      - traefik_proxy
+    ports:
+      - 35048:8080
+      - 6881:6881
+      - 6881:6881/udp
+    volumes:
+      - ${DATA_DIRECTORY}/qbittorrent:/config
+      - ${MEDIA}/torrents:/data/torrents
+      - ${MEDIA}/downloads:/downloads
+    user: root
+    environment:
+#      - PUID=1000
+#      - PGID=1000
+      - TZ=Europe/Madrid
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.${DOMINIO}`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=myresolver"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
