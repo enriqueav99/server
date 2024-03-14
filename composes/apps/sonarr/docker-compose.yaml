@@ -1,0 +1,26 @@
+services:
+  sonarr:
+    image: linuxserver/sonarr:latest
+    restart: unless-stopped
+    container_name: sonarr
+    networks:
+      - traefik_proxy
+    volumes:
+      - ${DATA_DIRECTORY}/sonarr:/config
+      - ${MEDIA}:/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+      - traefik.http.routers.sonarr-auth.rule=Host(`sonarr.${DOMINIO}`)
+      - traefik.http.routers.sonarr-auth.priority=1
+      - traefik.http.routers.sonarr-auth.entrypoints=websecure
+      - traefik.http.routers.sonarr-auth.tls.certresolver=myresolver
+      - traefik.http.routers.sonarr-auth.middlewares=authentik@docker
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMINIO}`) && PathPrefix(`/api`)
+      - traefik.http.routers.sonarr.priority=2
+      - traefik.http.routers.sonarr.entrypoints=websecure
+      - traefik.http.routers.sonarr.tls.certresolver=myresolverç

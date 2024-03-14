@@ -20,5 +20,4 @@ services:
       - "traefik.http.routers.homarr.entrypoints=websecure"
       - "traefik.http.routers.homarr.tls.certresolver=myresolver"
       - "traefik.http.services.homarr.loadbalancer.server.port=7575"
-      - "traefik.http.middlewares.homarr-auth.basicauth.users=${AUTH}"
-      - "traefik.http.routers.homarr.middlewares=homarr-auth@docker"
+      - traefik.http.routers.homarr.middlewares=authentik@docker

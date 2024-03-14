@@ -1,4 +1,22 @@
 services:
+  # loki:
+  #   image: grafana/loki:latest
+  #   container_name: loki
+  #   ports:
+  #     - "3100:3100"
+  #   networks:
+  #     - monitor_net
+
+  # promtail:
+  #   image: grafana/promtail:latest
+  #   container_name: promtail
+  #   volumes:
+  #     - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
+  #   networks:
+  #     - monitor_net
+  #   depends_on:
+  #     - loki
+
   prometheus:
     image: prom/prometheus
     user: root
@@ -64,6 +82,19 @@ services:
       - GF_SERVER_DOMAIN="grafana.${DOMINIO}"
       - GF_SERVER_ROOT_URL=https://grafana.${DOMINIO}
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_AUTH_GENERIC_OAUTH_ENABLED= "true"
+      - GF_AUTH_GENERIC_OAUTH_NAME= "authentik"
+      - GF_AUTH_GENERIC_OAUTH_CLIENT_ID= ${AUTHENTIK_ID}
+      - GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET= ${AUTHENTIK_SECRET}
+      - GF_AUTH_GENERIC_OAUTH_SCOPES= "openid profile email"
+      - GF_AUTH_GENERIC_OAUTH_AUTH_URL= "https://auth.${DOMINIO}/application/o/authorize/"
+      - GF_AUTH_GENERIC_OAUTH_TOKEN_URL= "https://auth.${DOMINIO}/application/o/token/"
+      - GF_AUTH_GENERIC_OAUTH_API_URL= "https://auth.${DOMINIO}/application/o/userinfo/"
+      - GF_AUTH_SIGNOUT_REDIRECT_URL= "https://auth.${DOMINIO}/application/o/grafana/end-session/"
+        # Optionally enable auto-login (bypasses Grafana login screen)
+        #GF_AUTH_OAUTH_AUTO_LOGIN: "true"
+    # Optionally map user groups to Grafana roles
+      - GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH= "contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/"]
       interval: 10s
@@ -72,17 +103,19 @@ services:
       start_period: 5s
     volumes:
       - ./entrypoint.sh:/app/entrypoint.sh
+      - ${DATA_DIRECTORY}/prom-gra/grafana/grafana:/etc/grafana
       - ${DATA_DIRECTORY}/prom-gra/grafana/config/dashboards:/etc/grafana/provisioning/datasources
       - ${DATA_DIRECTORY}/prom-gra/grafana/config/datasources:/etc/grafana/datasources
       - ${DATA_DIRECTORY}/prom-gra/grafana/config/plugins:/var/lib/grafana/plugins
       - ${DATA_DIRECTORY}/prom-gra/grafana/grafana_data:/var/lib/grafana
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.${DOMINIO}`)"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
-      - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.routers.grafana.tls.certresolver=myresolver
-      - "traefik.http.routers.grafana.middlewares=authentik@docker"
+      - traefik.enable=true
+      - traefik.http.routers.monitoreo.rule=Host(`grafana.${DOMINIO}`)
+      - traefik.http.services.monitoreo.loadbalancer.server.port=3000
+      - traefik.http.routers.monitoreo.tls=true
+      - traefik.http.routers.monitoreo.entrypoints=websecure
+      - traefik.http.routers.monitoreo.tls.certresolver=myresolver
+      - traefik.http.routers.monitoreo.middlewares=authentik@docker
 
 networks:
   monitor_net:

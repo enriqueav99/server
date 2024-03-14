@@ -29,7 +29,7 @@ services:
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
-    networks: 
+    networks:
       dhcp:
         ipv4_address: '172.31.0.100'
       traefik_proxy:
@@ -50,7 +50,7 @@ services:
     cap_add:
       - NET_ADMIN
 
-networks: 
+networks:
   dhcp:
     ipam:
       config:
