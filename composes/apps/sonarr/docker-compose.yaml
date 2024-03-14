@@ -23,4 +23,4 @@ services:
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMINIO}`) && PathPrefix(`/api`)
       - traefik.http.routers.sonarr.priority=2
       - traefik.http.routers.sonarr.entrypoints=websecure
-      - traefik.http.routers.sonarr.tls.certresolver=myresolver
+      - traefik.http.routers.sonarr.tls.certresolver=myresolverç
