@@ -1,0 +1,14 @@
+services:
+  composerize:
+    image: icedream/composerize
+    container_name: composerize
+    restart: unless-stopped
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.composerize.rule=Host(`composerize.${DOMINIO}`)"
+      - "traefik.http.routers.composerize.entrypoints=websecure"
+      - "traefik.http.routers.composerize.tls.certresolver=myresolver"
+      - "traefik.http.services.composerize.loadbalancer.server.port=8080"
+      - traefik.http.routers.composerize.middlewares=authentik@docker

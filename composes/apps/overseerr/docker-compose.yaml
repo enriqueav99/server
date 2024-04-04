@@ -9,11 +9,10 @@ services:
     restart: unless-stopped
     networks:
       - traefik_proxy
-    ports:
-      - 5055:5055
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.overseerr.rule=Host(`overseerr.${DOMINIO}`)"
       - "traefik.http.routers.overseerr.entrypoints=websecure"
       - "traefik.http.routers.overseerr.tls.certresolver=myresolver"
       - "traefik.http.services.overseerr.loadbalancer.server.port=5055"
+      - traefik.http.routers.cadvisor.middlewares=authentik@docker

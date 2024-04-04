@@ -7,11 +7,13 @@ include:
   - apps/authentik/docker-compose.yaml
   - apps/bazarr/docker-compose.yaml
   - apps/cAdvisor/docker-compose.yaml
+  - apps/composerize/docker-compose.yaml
   - apps/discord-bot/docker-compose.yaml
   - apps/excalidraw/docker-compose.yaml
   - apps/gd-dyndns/docker-compose.yaml
   - apps/homarr/docker-compose.yaml
 #  - apps/home-assistant/docker-compose.yaml
+  - apps/it-tools/docker-compose.yaml
   - apps/jackett/docker-compose.yaml
   - apps/komga/docker-compose.yaml
 #  - apps/local-ai/docker-compose.yaml
