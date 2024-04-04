@@ -1,0 +1,14 @@
+services:
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.it-tools.rule=Host(`it-tools.${DOMINIO}`)"
+      - "traefik.http.routers.it-tools.entrypoints=websecure"
+      - "traefik.http.routers.it-tools.tls.certresolver=myresolver"
+      - "traefik.http.services.it-tools.loadbalancer.server.port=8080"
+      - traefik.http.routers.cadvisor.middlewares=authentik@docker
