@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prom
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/enriqueav99/charts.git
+    targetRevision: main
+    path: apps/prometheus
+    # helm:
+    #   valueFiles:
+    #     - apps/prometheus/values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
