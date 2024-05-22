@@ -5,7 +5,7 @@ metadata:
 spec:
   acme:
     # La dirección de email asociada con el registro de Let's Encrypt
-    email: eandresvi.inf@upsa.es
+    email: xxx
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       # Una referencia a una secreto en el que se almacenará la clave privada de Let's Encrypt
