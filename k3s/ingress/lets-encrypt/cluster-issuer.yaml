@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    # La dirección de email asociada con el registro de Let's Encrypt
+    email: xxx
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # Una referencia a una secreto en el que se almacenará la clave privada de Let's Encrypt
+      name: letsencrypt
+    # Configuración del emisor ACME
+    solvers:
+    - http01:
+        ingress:
+          class: traefik

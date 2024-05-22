@@ -1,5 +1,5 @@
 services:
   discord-bot:
-    image: enriqueav99/discord-bot
+    image: enriqueav99/discord-bot:zarza
     restart: always
     container_name: discord-bot

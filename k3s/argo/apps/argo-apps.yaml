@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/enriqueav99/charts.git
+    targetRevision: main
+    path: apps/argo-apps
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
