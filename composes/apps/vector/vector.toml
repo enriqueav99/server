@@ -1,0 +1,16 @@
+# vector.toml
+[sources.docker_logs]
+type = "docker_logs"
+
+[sinks.loki]
+type = "loki"
+inputs = ["docker_logs"]
+endpoint = "http://loki:3100"
+encoding.codec = "json"
+remove_timestamp = false
+
+[sinks.loki.labels]
+source = "docker"
+container_name = "{{container_name}}"
+container_id = "{{container_id}}"
+stream = "{{stream}}"

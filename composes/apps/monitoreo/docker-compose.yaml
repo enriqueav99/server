@@ -6,19 +6,23 @@ services:
       - "3100:3100"
     networks:
       - monitor_net
+    command: -config.file=/etc/loki/local-config.yaml
+    user: root
+    # volumes:
+    #   - ./loki-config.yaml:/etc/loki/local-config.yaml
 
-  promtail:
-    image: grafana/promtail:latest
-    container_name: promtail
-    volumes:
-      - ./promtail-config.yaml:/etc/promtail/config.yml
-      - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - traefik_proxy
-      - monitor_net
-    depends_on:
-      - loki
+#  promtail:
+ #   image: grafana/promtail:latest
+  #  container_name: promtail
+   # volumes:
+#      - ./promtail-config.yaml:/etc/promtail/config.yml
+#      - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers:ro
+ #     - /var/run/docker.sock:/var/run/docker.sock
+  #  networks:
+   #   - traefik_proxy
+    #  - monitor_net
+   # depends_on:
+    #  - loki
 
   prometheus:
     image: prom/prometheus

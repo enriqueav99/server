@@ -7,7 +7,6 @@ include:
   - apps/authentik/docker-compose.yaml
   - apps/bazarr/docker-compose.yaml
   - apps/cAdvisor/docker-compose.yaml
-  - apps/cloudfare/docker-compose.yaml
   - apps/composerize/docker-compose.yaml
   - apps/discord-bot/docker-compose.yaml
   - apps/excalidraw/docker-compose.yaml
@@ -27,11 +26,12 @@ include:
 #  - apps/pihole-dhcp/docker-compose.yaml
   - apps/plex/docker-compose.yaml
   - apps/portainer/docker-compose.yaml
-  - apps/puter/docker-compose.yaml
+#  - apps/puter/docker-compose.yaml
   - apps/qbittorrent/docker-compose.yaml
   - apps/radarr/docker-compose.yaml
   - apps/sonarr/docker-compose.yaml
   - apps/traefik/docker-compose.yaml
+  - apps/vector/docker-compose.yaml
   - apps/watchtower/docker-compose.yaml
   - apps/wireguard/docker-compose.yaml
 #  - apps/wireguard-pihole/docker-compose.yaml
