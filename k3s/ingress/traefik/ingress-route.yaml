@@ -2,15 +2,16 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: ingressroutetls
-    #namespace: whoami
+  namespace: whoami
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`test.xxx.com`) && PathPrefix(`/tls`)
-    kind: Rule
-    services:
-    - name: frontend
-      port: 80
+    - kind: Rule
+      match: Host(`whoami.enriqueav.com`)
+      priority: 10
+      services:
+      - name: whoami
+        port: 80
   tls:
     certResolver: myresolver

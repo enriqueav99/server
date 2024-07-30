@@ -11,9 +11,9 @@ spec:
  tls:
   - secretName: whoami-tls
     hosts:
-      - whoami.xxx.com
+      - whoami.enriqueav.com
  rules:
-   - host: whoami.xxx.com
+   - host: whoami.enriqueav.com
      http:
        paths:
          - path: /

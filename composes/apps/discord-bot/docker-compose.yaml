@@ -1,5 +1,13 @@
 services:
   discord-bot:
-    image: enriqueav99/discord-bot:zarza
+    image: enriqueav99/discord-bot:aloe
     restart: always
     container_name: discord-bot
+    volumes:
+      - ${CAM}:${CAM}
+    devices:
+      - ${CAM}:${CAM}
+    environment:
+      DISCORD_BOT_CAM: ${CAM}
+      DISCORD_BOT_TOKEN: ${TOKEN}
+      DISCORD_BOT_PREFIX: '<'

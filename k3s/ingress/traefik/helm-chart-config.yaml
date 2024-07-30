@@ -10,7 +10,7 @@ spec:
       - "--api.dashboard=true"
       - "--api.insecure=true"
       - "--log.level=DEBUG"
-      - "--certificatesresolvers.myresolver.acme.email=xxx"
+      - "--certificatesresolvers.myresolver.acme.email=asdfqwe@gamil.com"
       - "--certificatesresolvers.myresolver.acme.storage=/data/acme.json"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.caServer=https://acme-v02.api.letsencrypt.org/directory"

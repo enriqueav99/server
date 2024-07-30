@@ -26,3 +26,11 @@ scrape_configs:
         labels:
           job: docker_logs
           __path__: /var/lib/docker/containers/*/*-json.log
+    pipeline_stages:
+      - json:
+          expressions:
+            name: Name
+      - docker:
+          container_name_from: json
+          container_id_path: /var/lib/docker/containers/*/config.v2.json
+          container_name_label: name

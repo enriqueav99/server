@@ -6,19 +6,23 @@ services:
       - "3100:3100"
     networks:
       - monitor_net
+    command: -config.file=/etc/loki/local-config.yaml
+    user: root
+    # volumes:
+    #   - ./loki-config.yaml:/etc/loki/local-config.yaml
 
-  promtail:
-    image: grafana/promtail:latest
-    container_name: promtail
-    volumes:
-      - ./promtail-config.yaml:/etc/promtail/config.yml
-      - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - traefik_proxy
-      - monitor_net
-    depends_on:
-      - loki
+#  promtail:
+ #   image: grafana/promtail:latest
+  #  container_name: promtail
+   # volumes:
+#      - ./promtail-config.yaml:/etc/promtail/config.yml
+#      - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers:ro
+ #     - /var/run/docker.sock:/var/run/docker.sock
+  #  networks:
+   #   - traefik_proxy
+    #  - monitor_net
+   # depends_on:
+    #  - loki
 
   prometheus:
     image: prom/prometheus
@@ -37,13 +41,11 @@ services:
     volumes:
       - ${DATA_DIRECTORY}/prom-gra/prometheus:/etc/prometheus
       - ${DATA_DIRECTORY}/prom-gra/prom_data:/prometheus
-    labels:
-      - logging="promtail"
-      - loggin_jobname="containerlogs"
 
   node-exporter:
-    image: prom/node-exporter
+    image: prom/node-exporter:latest
     container_name: node-exporter
+    restart: unless-stopped
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -53,9 +55,10 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
     networks:
       - monitor_net
-    restart: unless-stopped
 
   alertmanager:
     image: prom/alertmanager:v0.23.0

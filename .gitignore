@@ -1,3 +1,3 @@
 *.env
-.k3s/
-gd-ddns.sh
+./k3s
+./aloe
