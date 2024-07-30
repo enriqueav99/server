@@ -1,0 +1,13 @@
+services:
+  sysdig:
+    image: docker.io/sysdig/sysdig
+    container_name: sysdig
+    volumes:
+      - '/var/run/docker.sock:/host/var/run/docker.sock'
+      - '/dev:/host/dev'
+      - '/proc:/host/proc:ro'
+      - '/boot:/host/boot:ro'
+      - '/src:/src'
+      - '/lib/modules:/host/lib/modules:ro'
+      - '/usr:/host/usr:ro'
+      - '/etc:/host/etc:ro'

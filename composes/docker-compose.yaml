@@ -30,6 +30,7 @@ include:
   - apps/qbittorrent/docker-compose.yaml
   - apps/radarr/docker-compose.yaml
   - apps/sonarr/docker-compose.yaml
+  - apps/sysdig/docker-compose.yaml
   - apps/traefik/docker-compose.yaml
   - apps/vector/docker-compose.yaml
   - apps/watchtower/docker-compose.yaml
